@@ -111,8 +111,8 @@ class CalendarDateTime extends DataObject
         list($startDate, $endDate) = CalendarUtil::get_date_string($this->StartDate, $this->EndDate);
         return $this->customise(
             [
-                'StartDate'	=> $startDate,
-                'EndDate'	=> $endDate
+                'StartDate'    => $startDate,
+                'EndDate'    => $endDate
             ]
         )->renderWith(__CLASS__ .'\DateRange');
     }
@@ -150,10 +150,13 @@ class CalendarDateTime extends DataObject
             return $this->Event()->Parent()->getNextRecurringEvents($this->Event(), $this);
         }
 
+        $currentDate = date('Y-m-d'); // Get the current date
+
         return self::get()->filter(
             [
                 'EventID' => $this->EventID,
-                'StartDate:Not' => $this->StartDate
+                'StartDate:Not' => $this->StartDate,
+                'StartDate:GreaterThanOrEqual' => $currentDate // Add this line
             ]
         )->limit($this->Event()->Parent()->OtherDatesCount);
     }

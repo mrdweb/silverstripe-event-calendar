@@ -2,4 +2,4 @@
 Name: 'event-calendar'
 ---
 CachedCalendarTask:
-  cache_future_years: 2
+  cache_future_years: 0
