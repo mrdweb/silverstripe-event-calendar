@@ -20,6 +20,9 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\Security\Security;
 use SilverStripe\Security\Permission;
+use SilverStripe\View\Requirements;
+use SilverStripe\Admin\LeftAndMain;
+use SilverStripe\Admin\ModelAdmin;
 use UncleCheese\EventCalendar\Helpers\CalendarUtil;
 use UncleCheese\EventCalendar\Model\CalendarAnnouncement;
 use UncleCheese\EventCalendar\Pages\CalendarEvent;
@@ -68,10 +71,15 @@ class CalendarDateTime extends DataObject
      * @var string
      */
     private static $offset = "+00:00";
+    
+    private static $extra_requirements_javascript = 'javascript/event.js';
 
     public function getCMSFields()
     {
+        Requirements::javascript('javascript/event.js');  
+	    
         $fields = FieldList::create(
+
             DateField::create('StartDate', _t(__CLASS__.'.STARTDATE', 'Start date')),
             DateField::create('EndDate', _t(__CLASS__.'.ENDDATE', 'End date')),
             TimeField::create('StartTime', _t(__CLASS__.'.STARTTIME', 'Start time')),
@@ -83,6 +91,11 @@ class CalendarDateTime extends DataObject
 
         return $fields;
     }
+    
+    private static $defaults = [
+        'StartTime' => '09:00:00',
+        'EndTime' => '15:00:00'       
+    ];
 
     public function summaryFields()
     {
@@ -111,8 +124,8 @@ class CalendarDateTime extends DataObject
         list($startDate, $endDate) = CalendarUtil::get_date_string($this->StartDate, $this->EndDate);
         return $this->customise(
             [
-                'StartDate'    => $startDate,
-                'EndDate'    => $endDate
+                'StartDate'	=> $startDate,
+                'EndDate'	=> $endDate
             ]
         )->renderWith(__CLASS__ .'\DateRange');
     }
@@ -150,13 +163,10 @@ class CalendarDateTime extends DataObject
             return $this->Event()->Parent()->getNextRecurringEvents($this->Event(), $this);
         }
 
-        $currentDate = date('Y-m-d'); // Get the current date
-
         return self::get()->filter(
             [
                 'EventID' => $this->EventID,
-                'StartDate:Not' => $this->StartDate,
-                'StartDate:GreaterThanOrEqual' => $currentDate // Add this line
+                'StartDate:Not' => $this->StartDate
             ]
         )->limit($this->Event()->Parent()->OtherDatesCount);
     }
@@ -293,7 +303,15 @@ class CalendarDateTime extends DataObject
      */
     public function getTitle()
     {
-        return $this->Event()->Title;
+        return $this->Event()->Title .','. $this->Event()->Colour .','. $this->Event()->URLSegment;
+    }
+
+    /**
+     * @return string
+     */
+    public function getColour()
+    {
+        return $this->Event()->Colour;
     }
 
     /**

@@ -19,10 +19,18 @@ function loadMonthJson(month, year) {
 
 function applyMonthJson(month, year) {	
 	json = loaded_months[year+month];
+	//console.log(json);
 	for(date in json) {
+		//console.log(json[date].events);
 		if(json[date].events.length) {
-			$('[data-date="'+date+'"]').addClass('hasEvent').attr('title', json[date].events.join("\n"));
-
+			for (event in json[date].events ) {
+				
+				const event_slug = json[date].events[event];
+				
+				const event_split = event_slug.split(',');
+				
+				$('[data-date="'+date+'"]').append('<div class="calendar-events"><a href="/events/' + event_split[2] + '" class="event '+event_split[1]+'"><span>' + event_split[0] + '</span></a></div>');
+			}
 		}
 	}			
 }

@@ -43,6 +43,7 @@ class CalendarEvent extends Page
 
     private static $db = [
         'Location' => 'Text',
+		'Colour' => 'Enum("blue,green,grey,red,gold,teal", "")',
         'Recursion' => 'Boolean',
         'CustomRecursionType' => 'Int',
         'DailyInterval' => 'Int',
@@ -63,6 +64,11 @@ class CalendarEvent extends Page
         'RecurringDaysOfWeek'	=> RecurringDayOfWeek::class,
         'RecurringDaysOfMonth'	=> RecurringDayOfMonth::class
     ];
+	
+	private static $defaults = [
+		'ShowInMenus' => 0,
+		'ExcludeFromSitemap' => 1
+	];
 
     private static $icon = "mattclegg/silverstripe-event-calendar:client/dist/images/event-file.gif";
 
@@ -86,6 +92,19 @@ class CalendarEvent extends Page
                     'Location',
                     _t(Calendar::class.'.LOCATIONDESCRIPTION', 'The location for this event')
                 ),
+                'Content'
+            );
+            
+            $f->addFieldToTab(
+                "Root.Main",
+                DropdownField::create('Colour', 'Colour of event', [
+					'red' => 'Red - Te Mihi', 
+					'gold' => 'Gold - Poihipi', 
+					'teal' => 'Teal - Board', 
+					'blue' => 'Blue - School Wide', 
+					'green' => 'Green - PTA/Fundraisers',
+					'grey' => 'Grey - Term Breaks'
+				]),
                 'Content'
             );
 

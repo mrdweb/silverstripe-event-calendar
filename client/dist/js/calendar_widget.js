@@ -106,7 +106,7 @@
 			var html = '<table class="calendar-widget-table">';
 			html += '<thead>';
 			html += '<tr><th colspan="8"><a class="prev" href="javascript:void(0);"> &laquo; </a>';
-			html +=  '<a href="javascript:void(0);" class="show-month">'+monthName + "&nbsp;" + this.year + '</a>';
+			html += '<a href="javascript:void(0);" class="show-month">'+monthName + "&nbsp;" + this.year + '</a>';
 			html += '<a class="next" href="javascript:void(0);"> &raquo; </a></th></tr>';
 			html += '</thead>';
 			html += '<tbody>';
@@ -122,6 +122,8 @@
 			var cell = 1;
 			var empties = 0;
 			var row_count = Math.ceil((this.monthLength+this.startingDay)/7);
+			
+			const weekdays = ["Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday","Sunday"];
 
 			for (var i = 0; i < row_count; i++) {
 				for (var j = 0; j <= 6; j++) {
@@ -160,14 +162,20 @@
 					d = this.pad(day);
 					m = this.pad(m+1);
 					date = y+'-'+m+'-'+d;
-					html += '<td data-date="'+date+'" class="calendar-day '+klass+'">'+day+'</td>';
+					html += '<td data-date="'+date+'" class="calendar-day '+klass+'"><div class="calendar-date"><span class="calendar-day">'+day+'</span><span class="calendar-weekday">'+weekdays[j]+'</span></div></td>';
 					cell++;
 					
 				}
 				html += "<td class='show-week'>&laquo;</td>";
 				html += '</tr><tr>';
 			}
-			html += '</tr></tbody></table>';
+			html += '</tr></tbody>';
+			html += '<tfoot>';
+			html += '<tr><th colspan="8"><a class="prev" href="javascript:void(0);"> &laquo; </a>';
+			html += '<a href="javascript:void(0);" class="show-month">'+monthName + "&nbsp;" + this.year + '</a>';
+			html += '<a class="next" href="javascript:void(0);"> &raquo; </a></th></tr>';
+			html += '</tfoot>';			
+			html += '</table>';
 			return html;
 		},
 		pad: function(num) {
@@ -199,7 +207,7 @@
 		onShowMonth: function(start, end) {},
 		onMonthChange: function(month, year) {},
 		onInit: function(calendar) {},
-		startOnMonday: false,
+		startOnMonday: true,
 		calDaysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
 		calDaysLabels: [],
 		calMonthsLabels: []
