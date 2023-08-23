@@ -6,15 +6,17 @@ use Carbon\Carbon;
 use UncleCheese\EventCalendar\Models\CalendarDateTime;
 use UncleCheese\EventCalendar\Pages\Calendar;
 
+use function PHP81_BC\strftime;
+
 class CalendarUtil
 {
-    const ONE_DAY = "OneDay";
-    const SAME_MONTH_SAME_YEAR = "SameMonthSameYear";
-    const DIFF_MONTH_SAME_YEAR = "DiffMonthSameYear";
-    const DIFF_MONTH_DIFF_YEAR = "DiffMonthDiffYear";
-    const ONE_DAY_HEADER = "OneDayHeader";
-    const MONTH_HEADER = "MonthHeader";
-    const YEAR_HEADER = "YearHeader";
+    public const ONE_DAY = "OneDay";
+    public const SAME_MONTH_SAME_YEAR = "SameMonthSameYear";
+    public const DIFF_MONTH_SAME_YEAR = "DiffMonthSameYear";
+    public const DIFF_MONTH_DIFF_YEAR = "DiffMonthDiffYear";
+    public const ONE_DAY_HEADER = "OneDayHeader";
+    public const MONTH_HEADER = "MonthHeader";
+    public const YEAR_HEADER = "YearHeader";
 
     /**
      * @return array
@@ -86,7 +88,7 @@ class CalendarUtil
         } else {
             $template = _t(Calendar::class.".$key", $key);
         }
-        
+
         return str_replace(
             self::$format_character_placeholders,
             self::format_character_replacements($start, $end),
@@ -110,7 +112,7 @@ class CalendarUtil
             }
             return substr($str, 0, 4) . "-" . substr($str, 4, 2) . "-" . substr($str, 6, 2);
         }
-        
+
         return date('Y-m-d');
     }
 
@@ -121,16 +123,16 @@ class CalendarUtil
     {
         $strStartDate = null;
         $strEndDate = null;
-        
+
         $start = strtotime($startDate);
         $end = strtotime($endDate);
-        
+
         $startYear = date("Y", $start);
         $startMonth = date("m", $start);
-        
+
         $endYear = date("Y", $end);
         $endMonth = date("m", $end);
-        
+
         // Invalid date. Get me out of here!
         if ($start < 1) {
             return;
@@ -148,7 +150,7 @@ class CalendarUtil
         $break = strpos($dateString, '$End');
         if ($break !== false) {
             $strStartDate = substr($dateString, 0, $break);
-            $strEndDate = substr($dateString, $break+1, strlen($dateString) - strlen($strStartDate));
+            $strEndDate = substr($dateString, $break + 1, strlen($dateString) - strlen($strStartDate));
             return [$strStartDate, $strEndDate];
         }
 
@@ -231,7 +233,7 @@ class CalendarUtil
     {
         uasort($data, [self::class, "date_sort_callback"]);
     }
-    
+
     /**
      * Callback used by column_sort
      */
