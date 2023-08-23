@@ -20,7 +20,7 @@
 	"require": {
 		"silverstripe/cms": "^4",
 		"johngrogg/ics-parser": "^2",
-		"nesbot/carbon": "1.39.1"
+		"nesbot/carbon": "^2.0"
 	},
 	"support": {
 		"issues": "https://github.com/mattclegg/silverstripe-event-calendar/issues"
